@@ -1,0 +1,1 @@
+import { addNote } from "./lead";

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>CRM JS Project</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+			crossorigin="anonymous" />
+		<link rel="stylesheet" href="site.css" />
+	</head>
+	<body>
+		<!--Navbar start-->
+		<nav class="navbar navbar-expand-lg bg-info">
+			<div class="container">
+				<a class="navbar-brand shadow rounded-4 p-2" href="#"
+					>***CRM Project***</a
+				>
+				<button
+					class="navbar-toggler"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#navbarNav"
+					aria-controls="navbarNav"
+					aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNav">
+					<ul class="navbar-nav">
+						<li class="nav-item">
+							<a class="nav-link active" aria-current="page" href="#">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">Leads List</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">Lead Detail</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!--Navbar end-->
+		<!--Leads List start-->
+		<main class="d-flex flex-nowrap p-5">
+			<div class="container">
+				<div class="row p-2 justify-content-center">
+					<div class="col-sm-6 d-flex">
+						<form class="g-3 bg-dark rounded-3 p-2">
+							<div id="formControlElements" class="row">
+								<div class="col-md-6 form-floating mb-3">
+									<input
+										type="text"
+										class="form-control"
+										id="name"
+										placeholder="Type your name..." />
+									<label for="name" class="mx-2">Name</label>
+								</div>
+								<div class="col-md-6 form-floating mb-3">
+									<input
+										type="text"
+										class="form-control"
+										id="surname"
+										placeholder="Type your surname..." />
+									<label for="surname" class="mx-2">Surname</label>
+								</div>
+								<div class="col-md-6 form-floating mb-3">
+									<input
+										type="tel"
+										class="form-control"
+										id="phone"
+										placeholder="Type your phone number..." />
+									<label for="phone" class="mx-2">Phone</label>
+								</div>
+								<div class="col-md-6 form-floating mb-3">
+									<input
+										type="email"
+										class="form-control"
+										id="email"
+										placeholder="Type your email..." />
+									<label for="email" class="mx-2">Email</label>
+								</div>
+								<div class="col-md-12 form-floating mb-3">
+									<textarea
+										maxlength="512"
+										class="form-control"
+										placeholder="Leave a note here"
+										class="note"
+										style="height: 100px"></textarea>
+									<label for="note" class="mx-2">Note</label>
+								</div>
+							</div>
+
+							<div class="col-md-12 d-flex justify-content-between mb-3">
+								<button
+									id="addNewNote"
+									type="submit"
+									class="btn btn-warning btn-sm">
+									Add New Note
+								</button>
+								<button
+									id="addNewLead"
+									type="submit"
+									class="btn btn-success btn-sm">
+									Add New Lead
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="row shadow rounded-3 p-2">
+					<table class="table table-hover table-dark">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Name</th>
+								<th scope="col">Surname</th>
+								<th scope="col">Phone</th>
+								<th scope="col">E-mail</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+					<div class="error d-none"></div>
+				</div>
+			</div>
+		</main>
+		<!--Leads List end-->
+
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+			crossorigin="anonymous"></script>
+		<script src="lead.js"></script>
+	</body>
+</html>

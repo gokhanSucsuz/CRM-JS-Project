@@ -7,3 +7,15 @@
 .nav-item a, .navbar-brand {
     color: white !important;
 }
+
+.filtered {
+    display: none !important;
+}
+
+a {
+    float: end
+}
+
+table {
+    box-sizing: border-box;
+}

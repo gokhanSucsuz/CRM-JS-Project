@@ -2,6 +2,8 @@ const namep = document.querySelector("#name");
 const surName = document.querySelector("#surname");
 const phone = document.querySelector("#phone");
 const email = document.querySelector("#email");
+const cancelBtn = document.querySelector("#cancelBtn");
+const updateBtn = document.querySelector("#updateBtn");
 const addNewLead = document.querySelector("#addNewLead");
 const addNewNote = document.querySelector("#addNewNote");
 const formControlElements = document.querySelector("#formControlElements");
@@ -11,15 +13,24 @@ const error = document.querySelector(".error");
 const modalTitle = document.querySelector(".modal-title");
 const modalBodyUl = document.querySelector(".modal-body ul");
 const closeModal = document.querySelector(".closeModal");
-const search = document.querySelector("#txtSearch");
+const txtSearch = document.querySelector("#txtSearch");
 const form = document.querySelector("form");
+const updateDeleteBtn = document.querySelectorAll(".updateDeleteBtn");
+let detailBtns = document.querySelectorAll(".detailBtn");
+let editBtns = document.querySelectorAll(".editBtn");
+let deleteBtns = document.querySelectorAll(".deleteBtn");
+const leadID = document.querySelector("#leadID");
 
 let leads = localStorage.getItem("leads")
 	? JSON.parse(localStorage.getItem("leads"))
 	: [];
-
+load();
 eventListeners();
 function load() {
+	tbody.innerHTML = "";
+	leads = localStorage.getItem("leads")
+		? JSON.parse(localStorage.getItem("leads"))
+		: [];
 	if (leads.length < 1) {
 		const h5 = document.createElement("h5");
 		h5.classList = "fw-bold text-danger text-center";
@@ -28,14 +39,12 @@ function load() {
 		error.classList.remove("d-none");
 	} else {
 		error.classList.add("d-none");
-		leads.forEach((lead) => {
+		leads.forEach((lead, index) => {
 			const tr = document.createElement("tr");
-			tr.setAttribute("data-bs-toggle", "modal");
-			tr.setAttribute("data-bs-target", "#staticBackdrop");
 			tr.classList = "record";
 			const th = document.createElement("th");
 			th.setAttribute("scope", "row");
-			th.textContent = lead[0];
+			th.textContent = index + 1;
 			tr.appendChild(th);
 			for (let i = 1; i < 5; i++) {
 				const td = document.createElement("td");
@@ -43,19 +52,29 @@ function load() {
 				tr.appendChild(td);
 			}
 			const td = document.createElement("td");
-			td.innerHTML = `<button class="btn btn-sm btn-info">Edit</button><button class="btn btn-sm btn-danger">Delete</button> `;
+			console.log(index);
+			td.innerHTML = `
+			<div class="d-flex justify-content-between flex-wrap flex-md-nowrap btns">
+			<button onclick="leadDetail(${index})" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="detailBtn btn btn-sm btn-primary w-100">Detail</button>
+			<button onclick="leadEdit(${index})" class="editBtn btn btn-sm btn-info w-100">Edit</button>
+			<button onclick="leadDelete(${index})" class="deleteBtn btn btn-sm btn-danger w-100">Delete</button>
+			</div>`;
 			tr.appendChild(td);
 			tbody.appendChild(tr);
 		});
 	}
+	detailBtns = document.querySelectorAll(".detailBtn");
+	editBtns = document.querySelectorAll(".editBtn");
+	deleteBtns = document.querySelectorAll(".deleteBtn");
 }
 function eventListeners() {
-	load();
 	addNewLead.addEventListener("click", addLead);
 	addNewNote.addEventListener("click", addNote);
-	tbody.addEventListener("click", leadDetail);
+
+	updateBtn.addEventListener("click", leadUpdate);
 	closeModal.addEventListener("click", closeModalFunc);
-	search.addEventListener("keyup", filterElement);
+	txtSearch.addEventListener("keyup", filterElement);
+	cancelBtn.addEventListener("click", cancelFunc);
 }
 function addLead(e) {
 	e.preventDefault();
@@ -98,17 +117,14 @@ function addNote(e) {
 	div.appendChild(label);
 	formControlElements.appendChild(div);
 }
-function leadDetail(e) {
-	e.preventDefault();
-	modalTitle.innerHTML =
-		e.target.parentElement.children[1].value +
-		" " +
-		e.target.parentElement.children[2]?.value;
-
+function leadDetail(index2) {
+	console.log(index2);
 	leads
-		.filter((item) => item[0] == e.target.parentElement.children[0].textContent)
+		.filter((item, index) => index == index2)
 		.forEach((lead) => {
-			if (lead.length > 5) {
+			modalTitle.innerHTML = `ID= ${lead[0]} <br/> Name= ${lead[1]} <br/>Surname= ${lead[2]}`;
+			console.log(lead);
+			if (lead.length > 4) {
 				for (let i = 5; i < lead.length; i++) {
 					const li = document.createElement("li");
 					li.classList = "list-group-item";
@@ -124,6 +140,109 @@ function leadDetail(e) {
 			}
 		});
 }
+function cancelFunc() {
+	cancelBtn.classList.add("d-none");
+	addNewNote.removeAttribute("disabled");
+	addNewLead.classList.remove("d-none");
+	updateBtn.classList.add("d-none");
+	detailBtns.forEach((detail) => {
+		detail.removeAttribute("disabled");
+	});
+	editBtns.forEach((detail) => {
+		detail.removeAttribute("disabled");
+	});
+	deleteBtns.forEach((detail) => {
+		detail.setAttribute("disabled", false);
+	});
+	let notes = document.querySelectorAll(".note");
+	notes.forEach((note, index) => {
+		if (index > 0) note.parentElement.remove();
+	});
+	form.reset();
+
+	load();
+}
+function leadEdit(index2) {
+	leads = localStorage.getItem("leads")
+		? JSON.parse(localStorage.getItem("leads"))
+		: [];
+	leadID.value = "";
+	cancelBtn.classList.remove("d-none");
+	addNewNote.setAttribute("disabled", "true");
+	addNewLead.classList.add("d-none");
+	updateBtn.classList.remove("d-none");
+	detailBtns.forEach((detail) => {
+		detail.setAttribute("disabled", true);
+	});
+	editBtns.forEach((detail) => {
+		detail.setAttribute("disabled", true);
+	});
+	deleteBtns.forEach((detail) => {
+		detail.setAttribute("disabled", true);
+	});
+
+	leads
+		.filter((item, index) => index == index2)
+		.map((lead) => {
+			leadID.value = lead[0];
+			namep.value = lead[1].trim();
+			surName.value = lead[2].trim();
+			phone.value = lead[3].trim();
+			email.value = lead[4].trim();
+			let notes = document.querySelectorAll(".note");
+			notes.forEach((note) => note.remove());
+			if (lead.length > 5) {
+				for (let i = 5; i < lead.length; i++) {
+					let note = document.createElement("div");
+					note.classList = "col-md-12 form-floating mb-3";
+					let textarea = document.createElement("textarea");
+					textarea.classList = "form-control note";
+					textarea.setAttribute("maxlength", "512");
+					textarea.style.height = "100px";
+					textarea.value = lead[i];
+					let label = document.createElement("label");
+					label.classList = "mx-2";
+					label.setAttribute("for", "note");
+					label.innerHTML = `Note ${i - 4}`;
+					note.appendChild(textarea);
+					note.appendChild(label);
+					formControlElements.appendChild(note);
+				}
+			}
+		});
+}
+function leadUpdate() {
+	leads
+		.filter((lead) => lead[0] == leadID.value)
+		.map((lead) => {
+			lead[1] = namep.value.trim();
+			lead[2] = surName.value.trim();
+			lead[3] = phone.value.trim();
+			lead[4] = email.value.trim();
+			let notes = document.querySelectorAll(".note");
+			console.log(notes);
+			let index = 5;
+			notes.forEach((note) => {
+				console.log(note.value);
+				lead[index] = note.value;
+				index++;
+			});
+		});
+	localStorage.setItem("leads", JSON.stringify(leads));
+	tbody.innerHTML = "";
+	cancelFunc();
+}
+function leadDelete(e, index) {
+	leads = localStorage.getItem("leads")
+		? JSON.parse(localStorage.getItem("leads"))
+		: [];
+
+	leads.splice(index - 1, 1);
+
+	localStorage.setItem("leads", JSON.stringify(leads));
+	tbody.innerHTML = "";
+	load();
+}
 function closeModalFunc(e) {
 	e.preventDefault();
 	modalBodyUl.innerHTML = "";
@@ -138,7 +257,7 @@ const filterFunc = (filterValue) => {
 		.forEach((todo) => todo.classList.remove("filtered"));
 };
 function filterElement() {
-	const filterValue = search.value.trim().toLowerCase();
+	const filterValue = txtSearch.value.trim().toLowerCase();
 	filterFunc(filterValue);
 	console.log(filterValue);
 }

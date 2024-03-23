@@ -159,7 +159,6 @@ function cancelFunc() {
 		if (index > 0) note.parentElement.remove();
 	});
 	form.reset();
-
 	load();
 }
 function leadEdit(index2) {

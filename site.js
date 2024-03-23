@@ -24,6 +24,7 @@ const leadID = document.querySelector("#leadID");
 let leads = localStorage.getItem("leads")
 	? JSON.parse(localStorage.getItem("leads"))
 	: [];
+
 load();
 eventListeners();
 function load() {
